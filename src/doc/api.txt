@@ -1,0 +1,99 @@
+# API Service Documentation
+
+## Overview
+This file handles API communication for the Cordelia Cruises application, specifically focusing on fetching cruise itineraries.
+The service is designed to make authenticated requests to the Cordelia Cruises API.
+
+## Configuration
+```javascript
+const API_BASE_URL = 'https://staging.cordeliacruises.com/api/v2';
+```
+- Base URL points to the staging environment
+- Version 2 of the API is being used
+- Structured to easily switch between environments (staging/production)
+
+## Authentication
+```javascript
+const API_TOKEN = '...';
+```
+- Uses Bearer token authentication
+- Token is JWT-based
+- Stored as a constant for application-wide use
+
+## Headers Configuration
+```javascript
+const headers = {
+    'Authorization': `Bearer ${API_TOKEN}`,
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+};
+```
+Key headers:
+- `Authorization`: Bearer token for authentication
+- `Content-Type`: JSON format for requests
+- `Accept`: Accepts any response type
+
+## Main Function: fetchItineraries
+
+### Purpose
+Fetches cruise itinerary data from the API without pagination.
+
+
+
+### Flow
+1. **Request Initiation**
+   - Makes GET request to `/itineraries` endpoint
+   - Includes `pagination=false` query parameter
+   - Attaches authentication and content headers
+
+2. **Response Handling**
+   - Checks for successful response (`response.ok`)
+   - Parses JSON response
+   - Returns parsed data to caller
+
+3. **Error Handling**
+   - Catches network errors
+   - Handles API errors
+   - Logs errors for debugging
+   - Throws errors for upstream handling
+
+
+
+### Response Data Structure
+The API returns:
+1. **events**: Array of cruise events
+2. **itineraries**: Array of cruise itineraries (87 items)
+3. **pagination**: Pagination details (disabled)
+4. **ports**: Array of available ports (5 items)
+5. **ships**: Array of cruise ships
+
+
+### Key Integration Points
+1. **Redux Integration**
+   - Used in Redux thunks for state management
+   - Integrated with cruiseSlice for data fetching
+
+2. **Component Integration**
+   - Used in CruiseSearch component for initial data load
+   - Supports filtering functionality
+
+3. **Error Handling Integration**
+   - Errors propagate to UI components
+   - Supports error state in Redux store
+
+## Error Handling Strategy
+1. **Network Errors**
+   - Catches fetch failures
+   - Logs detailed error information
+
+2. **API Errors**
+   - Checks response status
+   - Throws specific error for non-200 responses
+
+3. **Data Validation**
+   - Console logs fetched data
+   - Allows debugging of API responses
+
+
+
+This documentation provides a comprehensive understanding of how the API service works and integrates with the rest of the application.
